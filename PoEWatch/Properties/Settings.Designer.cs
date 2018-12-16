@@ -37,7 +37,7 @@ namespace PoEWatch.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("20, 30")]
+        [global::System.Configuration.DefaultSettingValueAttribute("20, 20")]
         public global::System.Drawing.Size IngameMask {
             get {
                 return ((global::System.Drawing.Size)(this["IngameMask"]));

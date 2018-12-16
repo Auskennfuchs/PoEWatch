@@ -12,7 +12,7 @@ namespace PoEWatch
 
         public ScreenCapture()
         {
-           ScalingFactor = GetScalingFactor();
+            ScalingFactor = GetScalingFactor();
         }
 
         public Image CaptureWindow(IntPtr handle, Rectangle area)

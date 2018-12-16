@@ -38,6 +38,10 @@
             this.txtCaptureW = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.txtCaptureH = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.txtMaskH = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.txtMaskW = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.picCapture)).BeginInit();
             this.SuspendLayout();
             // 
@@ -106,7 +110,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(145, 25);
+            this.label3.Location = new System.Drawing.Point(141, 22);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(24, 20);
             this.label3.TabIndex = 7;
@@ -124,7 +128,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(145, 57);
+            this.label4.Location = new System.Drawing.Point(141, 54);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(21, 20);
             this.label4.TabIndex = 9;
@@ -139,11 +143,50 @@
             this.txtCaptureH.TabIndex = 8;
             this.txtCaptureH.TextChanged += new System.EventHandler(this.OnChange_CaptureArea);
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(295, 57);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(63, 20);
+            this.label5.TabIndex = 13;
+            this.label5.Text = "Mask H";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // txtMaskH
+            // 
+            this.txtMaskH.Location = new System.Drawing.Point(366, 54);
+            this.txtMaskH.Name = "txtMaskH";
+            this.txtMaskH.Size = new System.Drawing.Size(79, 26);
+            this.txtMaskH.TabIndex = 12;
+            this.txtMaskH.TextChanged += new System.EventHandler(this.OnChange_Mask);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(295, 25);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(66, 20);
+            this.label6.TabIndex = 11;
+            this.label6.Text = "Mask W";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // txtMaskW
+            // 
+            this.txtMaskW.Location = new System.Drawing.Point(366, 22);
+            this.txtMaskW.Name = "txtMaskW";
+            this.txtMaskW.Size = new System.Drawing.Size(79, 26);
+            this.txtMaskW.TabIndex = 10;
+            // 
             // SetupCapture
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(734, 515);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.txtMaskH);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.txtMaskW);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.txtCaptureH);
             this.Controls.Add(this.label3);
@@ -177,5 +220,9 @@
         private System.Windows.Forms.TextBox txtCaptureW;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtCaptureH;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox txtMaskH;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox txtMaskW;
     }
 }

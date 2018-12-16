@@ -17,6 +17,7 @@ namespace PoEWatch
         private Point mousePos;
         private Pen pen;
         private Rectangle gameCaptureArea;
+        private Size maskSize;
 
         public Process Process { get; set; }
 
@@ -32,15 +33,22 @@ namespace PoEWatch
             captureArea = new Rectangle(0, 0, (int)(picCapture.ClientRectangle.Width*scalingFactor), (int)(picCapture.ClientRectangle.Height* scalingFactor));
             captureTimer = new Timer(state => this.CaptureScreen(), null, 0, 100);
             gameCaptureArea = (Rectangle)Properties.Settings.Default["CaptureRect"];
+            maskSize = (Size)Properties.Settings.Default["IngameMask"];
             var sx= gameCaptureArea.X.ToString();
             var sy = gameCaptureArea.Y.ToString();
-             var sw = gameCaptureArea.Width.ToString();
+            var sw = gameCaptureArea.Width.ToString();
             var sh = gameCaptureArea.Height.ToString();
+            var mw = maskSize.Width.ToString();
+            var mh = maskSize.Height.ToString();
         
             txtCaptureX.Text = sx;
             txtCaptureY.Text = sy;
             txtCaptureW.Text = sw;
             txtCaptureH.Text = sh;
+
+            txtMaskW.Text = mw;
+            txtMaskH.Text = mh;
+
             if (Process != null)
             {
                 processArea = screenCapture.GetClientArea(Process.MainWindowHandle);
@@ -126,6 +134,7 @@ namespace PoEWatch
         private void btnOk_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default["CaptureRect"] = gameCaptureArea;
+            Properties.Settings.Default["IngameMask"] = maskSize;
             Properties.Settings.Default.Save();
             this.Close();
         }
@@ -144,6 +153,17 @@ namespace PoEWatch
                 gameCaptureArea = new Rectangle(x, y, w, h);
             }
             this.Invalidate();
-        }        
+        }
+
+        private void OnChange_Mask(object sender, EventArgs e)
+        {
+            var w = maskSize.Width;
+            var h = maskSize.Height;
+            if (int.TryParse(txtMaskW.Text, out w)
+                && int.TryParse(txtMaskH.Text, out h))
+            {
+                maskSize = new Size(w, h);
+            }
+        }
     }
 }

@@ -157,7 +157,7 @@ namespace PoEWatch
                 lock (ingameMask)
                 {
                     var maskRect = new Rectangle(0, 0, ingameMask.Width, ingameMask.Height);
-                    var imageSize = (float)maskRect.Width * maskRect.Height;
+                    var imageSize = (float)maskRect.Width * ingameMask.Height;
                     var image1 = curDisplay.Clone(maskRect, curDisplay.PixelFormat) as Bitmap;
                     var maskDiffImg = GetDifferenceImage(image1, ingameMask, out var diffCount);
                     var diffThreshold = diffCount / imageSize <= 0.1f;
@@ -188,6 +188,7 @@ namespace PoEWatch
                 {
                 }
             }
+            btnCaptureScreen_Click(null, null);
         }
 
         private bool CheckImageDiff(Bitmap curImage, Bitmap maskImage, float threshold)

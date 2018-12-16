@@ -6,7 +6,7 @@
       <Value Profile="(Default)">30, 1383, 150, 20</Value>
     </Setting>
     <Setting Name="IngameMask" Type="System.Drawing.Size" Scope="User">
-      <Value Profile="(Default)">20, 30</Value>
+      <Value Profile="(Default)">20, 20</Value>
     </Setting>
     <Setting Name="ProcessName" Type="System.String" Scope="User">
       <Value Profile="(Default)">PathOfExile_x64</Value>
