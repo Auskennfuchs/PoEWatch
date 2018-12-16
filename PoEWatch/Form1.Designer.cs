@@ -37,6 +37,8 @@
             this.btnIngameMask = new System.Windows.Forms.Button();
             this.lblInGame = new System.Windows.Forms.Label();
             this.btnSetup = new System.Windows.Forms.Button();
+            this.processName = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ingameMaskPicture)).BeginInit();
             this.SuspendLayout();
@@ -125,11 +127,35 @@
             this.btnSetup.UseVisualStyleBackColor = true;
             this.btnSetup.Click += new System.EventHandler(this.btnSetup_Click);
             // 
+            // processName
+            // 
+            this.processName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.processName.FormattingEnabled = true;
+            this.processName.Items.AddRange(new object[] {
+            "PathOfExile_x64",
+            "PathOfExile_x64Steam"});
+            this.processName.Location = new System.Drawing.Point(98, 48);
+            this.processName.Name = "processName";
+            this.processName.Size = new System.Drawing.Size(186, 28);
+            this.processName.TabIndex = 10;
+            this.processName.SelectedValueChanged += new System.EventHandler(this.processName_SelectedValueChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 51);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(66, 20);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "Process";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(825, 433);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.processName);
             this.Controls.Add(this.btnSetup);
             this.Controls.Add(this.lblInGame);
             this.Controls.Add(this.btnIngameMask);
@@ -159,6 +185,8 @@
         private System.Windows.Forms.Button btnIngameMask;
         private System.Windows.Forms.Label lblInGame;
         private System.Windows.Forms.Button btnSetup;
+        private System.Windows.Forms.ComboBox processName;
+        private System.Windows.Forms.Label label1;
     }
 }
 

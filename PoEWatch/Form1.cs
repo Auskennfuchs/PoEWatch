@@ -38,12 +38,12 @@ namespace PoEWatch
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            processName.SelectedItem = Properties.Settings.Default["ProcessName"];
         }
 
         private void AttachProcess()
         {
-            var allProcesses = Process.GetProcessesByName("PathOfExile_x64");//bf3
+            var allProcesses = Process.GetProcessesByName((string)processName.SelectedItem);//bf3
             foreach (var p in allProcesses)
             {
                 if (p.MainWindowHandle == IntPtr.Zero)
@@ -213,6 +213,12 @@ namespace PoEWatch
         private void btnSetup_Click(object sender, EventArgs e)
         {
             setupCapture.ShowDialog();
+        }
+
+        private void processName_SelectedValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default["ProcessName"] = processName.SelectedItem;
+            Properties.Settings.Default.Save();
         }
 
         public static unsafe int GetDifferenceImage(Bitmap image1, Bitmap image2, out int diffCount)

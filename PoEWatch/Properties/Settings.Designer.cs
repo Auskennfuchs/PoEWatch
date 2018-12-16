@@ -46,5 +46,17 @@ namespace PoEWatch.Properties {
                 this["IngameMask"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("PathOfExile_x64")]
+        public string ProcessName {
+            get {
+                return ((string)(this["ProcessName"]));
+            }
+            set {
+                this["ProcessName"] = value;
+            }
+        }
     }
 }

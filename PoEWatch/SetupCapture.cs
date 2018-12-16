@@ -127,6 +127,7 @@ namespace PoEWatch
         {
             Properties.Settings.Default["CaptureRect"] = gameCaptureArea;
             Properties.Settings.Default.Save();
+            this.Close();
         }
 
         private void OnChange_CaptureArea(object sender, EventArgs e)
