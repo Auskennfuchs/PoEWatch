@@ -21,8 +21,8 @@ namespace PoEWatch
         private int processId;
         private Timer captureTimer;
         private ScreenCapture screenCapture;
-        private System.Drawing.Rectangle captureArea = new Rectangle(0, 960, 100, 20);
-        private Bitmap ingameMask, lifeMask, curCapture;
+        private System.Drawing.Rectangle captureArea = new Rectangle(0, 960, 100, 30);
+        private volatile Bitmap ingameMask, lifeMask, curCapture;
         private volatile bool inGame = false;
         private volatile bool capturing = false;
 
@@ -204,7 +204,7 @@ namespace PoEWatch
                     var maskRect = new Rectangle(0, 0, ingameMask.Width, ingameMask.Height);
                     var imageSize = (float)maskRect.Width * maskRect.Height;
                     var image1 = curDisplay.Clone(maskRect, curDisplay.PixelFormat) as Bitmap;
-                    var maskDiffImg = GetDifferenceImage(image1, ingameMask, Color.Magenta, out var diffCount);
+                    var maskDiffImg = GetDifferenceImage(image1, ingameMask, out var diffCount);
                     var diffThreshold = diffCount / imageSize <= 0.1f;
                     if (diffThreshold != inGame)
                     {
@@ -216,21 +216,7 @@ namespace PoEWatch
 
         private bool CheckHealth(Bitmap curDisplay)
         {
-            if (lifeMask == null || curDisplay == null)
-            {
-                return true;
-            }
-            lock (curDisplay)
-            {
-                lock (lifeMask)
-                {
-                    var maskRect = new Rectangle(0, 0, lifeMask.Width, lifeMask.Height);
-                    var imageSize = (float)maskRect.Width * maskRect.Height;
-                    var image1 = curDisplay.Clone(maskRect, curDisplay.PixelFormat) as Bitmap;
-                    var maskDiffImg = GetDifferenceImage(image1, lifeMask, Color.Magenta, out var diffCount);
-                    return diffCount / imageSize <= 0.1f;
-                }
-            }
+            return CheckImageDiff(curDisplay, lifeMask, 0.1f);
         }
 
         private void DoLogout()
@@ -239,7 +225,13 @@ namespace PoEWatch
             Thread.Sleep(5);
             for (var i = 0; i < 20; i++)
             {
-                SendKeys.Send("{F4}");
+                try
+                {
+                    SendKeys.SendWait("{F4}");
+                }
+                catch
+                {
+                }
             }
         }
 
@@ -256,96 +248,76 @@ namespace PoEWatch
                     var maskRect = new Rectangle(0, 0, maskImage.Width, maskImage.Height);
                     var imageSize = (float)maskRect.Width * maskRect.Height;
                     var image1 = curImage.Clone(maskRect, curImage.PixelFormat) as Bitmap;
-                    var maskDiffImg = GetDifferenceImage(image1, maskImage, Color.Magenta, out var diffCount);
-                    return diffCount / imageSize <= 0.1f;
+                    var maskDiffImg = GetDifferenceImage(image1, maskImage, out var diffCount);
+                    var diff = diffCount / imageSize;
+                    return diffCount / imageSize <= threshold;
                 }
             }
         }
 
-        public static unsafe Bitmap GetDifferenceImage(Bitmap image1, Bitmap image2, Color matchColor, out int diffCount)
+        public static unsafe int GetDifferenceImage(Bitmap image1, Bitmap image2, out int diffCount)
         {
             diffCount = 0;
             if (image1 == null | image2 == null)
-                return null;
+            {
+                return 0;
+            }
 
             if (image1.Height != image2.Height || image1.Width != image2.Width)
-                return null;
-
-            var diffImage = image2.Clone() as Bitmap;
-            lock (diffImage)
             {
+                return 0;
+            }
 
-                int height = image2.Height;
-                int width = image2.Width;
+            int height = image2.Height;
+            int width = image2.Width;
 
-                var data1 = image1.LockBits(new Rectangle(0, 0, width, height),
-                                                   ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
-                var data2 = image2.LockBits(new Rectangle(0, 0, width, height),
-                                                   ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
-                var diffData = diffImage.LockBits(new Rectangle(0, 0, width, height),
-                                                       ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+            var data1 = image1.LockBits(new Rectangle(0, 0, width, height),
+                                               ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            var data2 = image2.LockBits(new Rectangle(0, 0, width, height),
+                                               ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            byte* data1Ptr = (byte*)data1.Scan0;
+            byte* data2Ptr = (byte*)data2.Scan0;
 
-                byte* data1Ptr = (byte*)data1.Scan0;
-                byte* data2Ptr = (byte*)data2.Scan0;
-                byte* diffPtr = (byte*)diffData.Scan0;
+            int rowPadding = data1.Stride - (image1.Width * 4);
 
-                byte[] swapColor = new byte[4];
-                swapColor[0] = matchColor.B;
-                swapColor[1] = matchColor.G;
-                swapColor[2] = matchColor.R;
-                swapColor[3] = matchColor.A;
-
-                int rowPadding = data1.Stride - (image1.Width * 4);
-
-                // iterate over height (rows)
-                for (int i = 0; i < height; i++)
+            // iterate over height (rows)
+            for (int i = 0; i < height; i++)
+            {
+                // iterate over width (columns)
+                for (int j = 0; j < width; j++)
                 {
-                    // iterate over width (columns)
-                    for (int j = 0; j < width; j++)
+                    int same = 0;
+
+                    byte[] tmp = new byte[4];
+
+                    // compare pixels and copy new values into temporary array
+                    for (int x = 0; x < 4; x++)
                     {
-                        int same = 0;
-
-                        byte[] tmp = new byte[4];
-
-                        // compare pixels and copy new values into temporary array
-                        for (int x = 0; x < 4; x++)
+                        tmp[x] = data2Ptr[0];
+                        if (data1Ptr[0] == data2Ptr[0])
                         {
-                            tmp[x] = data2Ptr[0];
-                            if (data1Ptr[0] == data2Ptr[0])
-                            {
-                                same++;
-                            }
-                            data1Ptr++; // advance image1 ptr
-                            data2Ptr++; // advance image2 ptr
+                            same++;
                         }
-
-                        if (same != 4)
-                        {
-                            diffCount++;
-                        }
-
-                        // swap color or add new values
-                        for (int x = 0; x < 4; x++)
-                        {
-                            diffPtr[0] = (same == 4) ? tmp[x] : swapColor[x];
-                            diffPtr++; // advance diff image ptr
-                        }
+                        data1Ptr++; // advance image1 ptr
+                        data2Ptr++; // advance image2 ptr
                     }
 
-                    // at the end of each column, skip extra padding
-                    if (rowPadding > 0)
+                    if (same != 4)
                     {
-                        data1Ptr += rowPadding;
-                        data2Ptr += rowPadding;
-                        diffPtr += rowPadding;
+                        diffCount++;
                     }
                 }
 
-                image1.UnlockBits(data1);
-                image2.UnlockBits(data2);
-                diffImage.UnlockBits(diffData);
+                // at the end of each column, skip extra padding
+                if (rowPadding > 0)
+                {
+                    data1Ptr += rowPadding;
+                    data2Ptr += rowPadding;
+                }
             }
-            return diffImage;
+            image1.UnlockBits(data1);
+            image2.UnlockBits(data2);
+            return diffCount;
         }
 
         private void SetIngameIndicator(bool ingame)
