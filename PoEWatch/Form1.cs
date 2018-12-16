@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -14,7 +13,7 @@ namespace PoEWatch
     {
         private Process process;
         private int processId;
-        private Timer captureTimer;
+        private volatile Timer captureTimer;
         private ScreenCapture screenCapture;
         private Rectangle captureArea = (Rectangle)Properties.Settings.Default["CaptureRect"];
         private Size ingameMaskArea = (Size)Properties.Settings.Default["IngameMask"];
@@ -81,7 +80,11 @@ namespace PoEWatch
             {
                 capturing = true;
                 captureTimer = new Timer(state => this.CaptureScreen(), this, 0, 30);
-                this.Text = this.Text + " - Capturing";
+                this.Invoke(new MethodInvoker(
+                 delegate ()
+                {
+                    this.Text = this.Text + " - Capturing";
+                }));
             }
             else
             {
@@ -90,8 +93,12 @@ namespace PoEWatch
                 captureTimer = null;
                 lifeMask = null;
                 capturing = false;
-                this.Text = this.Text.Replace(" - Capturing","");
-            }
+                this.Invoke(new MethodInvoker(
+                 delegate ()
+                 {
+                     this.Text = this.Text.Replace(" - Capturing", "");
+                 }));
+            }            
         }
 
         private void CaptureScreen()
@@ -176,6 +183,11 @@ namespace PoEWatch
 
         private void DoLogout()
         {
+            if(!capturing)
+            {
+                return;
+            }
+            captureTimer.Change(-1, -1);
             SetForegroundWindow(process.MainWindowHandle);
             Thread.Sleep(5);
             for (var i = 0; i < 20; i++)
@@ -188,7 +200,12 @@ namespace PoEWatch
                 {
                 }
             }
-            btnCaptureScreen_Click(null, null);
+            this.Invoke(new MethodInvoker(
+                delegate ()
+                {
+                    btnCaptureScreen_Click(null, null);
+                }
+                ));
         }
 
         private bool CheckImageDiff(Bitmap curImage, Bitmap maskImage, float threshold)
