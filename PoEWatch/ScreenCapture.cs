@@ -1,23 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PoEWatch
 {
     class ScreenCapture
     {
-        private float scalingFactor=1.0f;
+        public float ScalingFactor {
+            get; private set;
+        }
 
         public ScreenCapture()
         {
-            scalingFactor = GetScalingFactor();
+           ScalingFactor = GetScalingFactor();
         }
 
-        public Image CaptureWindow(IntPtr handle,Rectangle area)
+        public Image CaptureWindow(IntPtr handle, Rectangle area)
         {
             // get te hDC of the target window
             IntPtr hdcSrc = User32.GetWindowDC(handle);
@@ -26,10 +24,10 @@ namespace PoEWatch
             User32.GetWindowRect(handle, ref windowRect);
             //            int width = (int)((windowRect.right - windowRect.left) * scalingFactor);
             //            int height = (int)((windowRect.bottom - windowRect.top) * scalingFactor);
-            int x = (int)(area.Left * scalingFactor);
-            int y = (int)(area.Top * scalingFactor);
-            int width = (int)(area.Width * scalingFactor);
-            int height = (int)(area.Height * scalingFactor);
+            int x = (int)(area.Left * ScalingFactor);
+            int y = (int)(area.Top * ScalingFactor);
+            int width = (int)(area.Width * ScalingFactor);
+            int height = (int)(area.Height * ScalingFactor);
             // create a device context we can copy to
             IntPtr hdcDest = GDI32.CreateCompatibleDC(hdcSrc);
             // create a bitmap we can copy it to,
@@ -49,6 +47,13 @@ namespace PoEWatch
             // free up the Bitmap object
             GDI32.DeleteObject(hBitmap);
             return img;
+        }
+
+        public Rectangle GetClientArea(IntPtr handle)
+        {
+            User32.RECT windowRect = new User32.RECT();
+            User32.GetWindowRect(handle, ref windowRect);
+            return new Rectangle(0, 0, windowRect.right - windowRect.left, windowRect.bottom - windowRect.top);
         }
 
         private float GetScalingFactor()

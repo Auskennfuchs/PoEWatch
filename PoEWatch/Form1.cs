@@ -1,8 +1,4 @@
-﻿using Capture;
-using Capture.Hook;
-using Capture.Hook.Common;
-using Capture.Interface;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -17,14 +13,16 @@ namespace PoEWatch
     public partial class Form1 : Form
     {
         private Process process;
-        private CaptureProcess captureProcess;
         private int processId;
         private Timer captureTimer;
         private ScreenCapture screenCapture;
-        private System.Drawing.Rectangle captureArea = new Rectangle(0, 960, 100, 30);
+        private Rectangle captureArea = (Rectangle)Properties.Settings.Default["CaptureRect"];
+        private Size ingameMaskArea = (Size)Properties.Settings.Default["IngameMask"];
         private volatile Bitmap ingameMask, lifeMask, curCapture;
         private volatile bool inGame = false;
         private volatile bool capturing = false;
+
+        private SetupCapture setupCapture = new SetupCapture();
 
         [DllImport("user32.dll")]
         static extern bool SetForegroundWindow(IntPtr hWnd);
@@ -48,52 +46,24 @@ namespace PoEWatch
             var allProcesses = Process.GetProcessesByName("PathOfExile_x64");//bf3
             foreach (var p in allProcesses)
             {
-                if (p.MainWindowHandle == IntPtr.Zero || HookManager.IsHooked(p.Id))
+                if (p.MainWindowHandle == IntPtr.Zero)
                 {
                     continue;
                 }
-                var direct3DVersion = Direct3DVersion.Direct3D11;
-                var cc = new CaptureConfig()
-                {
-                    Direct3DVersion = direct3DVersion,
-                    ShowOverlay = true
-                };
                 process = p;
                 processId = p.Id;
-
-                var captureInterface = new CaptureInterface();
-                captureInterface.RemoteMessage += new MessageReceivedEvent(CaptureInterface_RemoteMessage);
-                captureProcess = new CaptureProcess(process, cc, captureInterface);
+                setupCapture.Process = p;
                 break;
             }
             Thread.Sleep(10);
-            if (captureProcess == null)
+            if (process == null)
             {
                 MessageBox.Show("No running executable found.");
             }
         }
 
-        /// <summary>
-        /// Display messages from the target process
-        /// </summary>
-        /// <param name="message"></param>
-        void CaptureInterface_RemoteMessage(MessageReceivedEventArgs message)
-        {
-            txtDebugLog.Invoke(new MethodInvoker(delegate ()
-            {
-                txtDebugLog.Text = String.Format("{0}\r\n{1}", message, txtDebugLog.Text);
-            })
-            );
-        }
-
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (captureProcess != null)
-            {
-                HookManager.RemoveHookedProcess(captureProcess.Process.Id);
-                captureProcess.CaptureInterface.Disconnect();
-                captureProcess = null;
-            }
             if (captureTimer != null)
             {
                 captureTimer.Change(-1, -1);
@@ -105,29 +75,13 @@ namespace PoEWatch
             AttachProcess();
         }
 
-        private void btnFPS_Click(object sender, EventArgs e)
-        {
-            captureProcess.CaptureInterface.DrawOverlayInGame(new Overlay
-            {
-                Elements = new List<Capture.Hook.Common.IOverlayElement>
-                {
-                    new Capture.Hook.Common.FramesPerSecond(new System.Drawing.Font("Arial", 18, FontStyle.Bold)) {
-                            Location = new Point(25, 125),
-                            Color = Color.Red,
-                            AntiAliased = true,
-                            Text = "{0:N0} fps"
-                        },
-                },
-                Hidden = false
-            });
-        }
-
         private void btnCaptureScreen_Click(object sender, EventArgs e)
         {
             if (captureTimer == null)
             {
                 capturing = true;
-                captureTimer = new Timer(state => this.CaptureScreen(), this, 0, 15);
+                captureTimer = new Timer(state => this.CaptureScreen(), this, 0, 30);
+                this.Text = this.Text + " - Capturing";
             }
             else
             {
@@ -136,16 +90,17 @@ namespace PoEWatch
                 captureTimer = null;
                 lifeMask = null;
                 capturing = false;
+                this.Text = this.Text.Replace(" - Capturing","");
             }
         }
 
         private void CaptureScreen()
         {
-            if (captureProcess == null)
+            if (process == null)
             {
                 return;
             }
-            curCapture = (Bitmap)screenCapture.CaptureWindow(captureProcess.Process.MainWindowHandle, captureArea);
+            curCapture = (Bitmap)screenCapture.CaptureWindow(process.MainWindowHandle, captureArea);
             CheckIngame(curCapture);
             if (lifeMask == null)
             {
@@ -179,7 +134,7 @@ namespace PoEWatch
                 return;
             }
             ingameMask?.Dispose();
-            ingameMask = new Bitmap(20, curCapture.Height);
+            ingameMask = new Bitmap(ingameMaskArea.Width, ingameMaskArea.Height);
             var g = Graphics.FromImage(ingameMask);
             g.DrawImage(curCapture, 0, 0);
             ingameMaskPicture.Invoke(new MethodInvoker(
@@ -221,7 +176,7 @@ namespace PoEWatch
 
         private void DoLogout()
         {
-            SetForegroundWindow(captureProcess.Process.MainWindowHandle);
+            SetForegroundWindow(process.MainWindowHandle);
             Thread.Sleep(5);
             for (var i = 0; i < 20; i++)
             {
@@ -253,6 +208,11 @@ namespace PoEWatch
                     return diffCount / imageSize <= threshold;
                 }
             }
+        }
+
+        private void btnSetup_Click(object sender, EventArgs e)
+        {
+            setupCapture.ShowDialog();
         }
 
         public static unsafe int GetDifferenceImage(Bitmap image1, Bitmap image2, out int diffCount)

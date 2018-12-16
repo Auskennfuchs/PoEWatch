@@ -1,7 +1,12 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="PoEWatch.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="CaptureRect" Type="System.Drawing.Rectangle" Scope="User">
+      <Value Profile="(Default)">30, 1383, 150, 20</Value>
+    </Setting>
+    <Setting Name="IngameMask" Type="System.Drawing.Size" Scope="User">
+      <Value Profile="(Default)">20, 30</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>

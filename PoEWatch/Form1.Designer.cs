@@ -29,28 +29,17 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.txtDebugLog = new System.Windows.Forms.TextBox();
             this.btnInject = new System.Windows.Forms.Button();
-            this.btnFPS = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btnCaptureScreen = new System.Windows.Forms.Button();
             this.ingameMaskPicture = new System.Windows.Forms.PictureBox();
             this.btnLogout = new System.Windows.Forms.Button();
             this.btnIngameMask = new System.Windows.Forms.Button();
             this.lblInGame = new System.Windows.Forms.Label();
+            this.btnSetup = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ingameMaskPicture)).BeginInit();
             this.SuspendLayout();
-            // 
-            // txtDebugLog
-            // 
-            this.txtDebugLog.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtDebugLog.Location = new System.Drawing.Point(12, 496);
-            this.txtDebugLog.Multiline = true;
-            this.txtDebugLog.Name = "txtDebugLog";
-            this.txtDebugLog.Size = new System.Drawing.Size(1360, 105);
-            this.txtDebugLog.TabIndex = 0;
             // 
             // btnInject
             // 
@@ -62,26 +51,15 @@
             this.btnInject.UseVisualStyleBackColor = true;
             this.btnInject.Click += new System.EventHandler(this.btnInject_Click);
             // 
-            // btnFPS
-            // 
-            this.btnFPS.Location = new System.Drawing.Point(98, 12);
-            this.btnFPS.Name = "btnFPS";
-            this.btnFPS.Size = new System.Drawing.Size(90, 30);
-            this.btnFPS.TabIndex = 2;
-            this.btnFPS.Text = "FPS";
-            this.btnFPS.UseVisualStyleBackColor = true;
-            this.btnFPS.Click += new System.EventHandler(this.btnFPS_Click);
-            // 
             // pictureBox1
             // 
-            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox1.Location = new System.Drawing.Point(12, 90);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(711, 325);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.Size = new System.Drawing.Size(418, 331);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 3;
             this.pictureBox1.TabStop = false;
             // 
@@ -97,13 +75,13 @@
             // 
             // ingameMaskPicture
             // 
-            this.ingameMaskPicture.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ingameMaskPicture.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.ingameMaskPicture.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ingameMaskPicture.Location = new System.Drawing.Point(729, 90);
+            this.ingameMaskPicture.Location = new System.Drawing.Point(450, 90);
             this.ingameMaskPicture.Name = "ingameMaskPicture";
-            this.ingameMaskPicture.Size = new System.Drawing.Size(87, 325);
+            this.ingameMaskPicture.Size = new System.Drawing.Size(363, 331);
+            this.ingameMaskPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.ingameMaskPicture.TabIndex = 5;
             this.ingameMaskPicture.TabStop = false;
             // 
@@ -129,27 +107,37 @@
             // 
             // lblInGame
             // 
+            this.lblInGame.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblInGame.AutoSize = true;
-            this.lblInGame.Location = new System.Drawing.Point(1243, 22);
+            this.lblInGame.Location = new System.Drawing.Point(684, 22);
             this.lblInGame.Name = "lblInGame";
             this.lblInGame.Size = new System.Drawing.Size(129, 20);
             this.lblInGame.TabIndex = 8;
             this.lblInGame.Text = "Ingame Indicator";
             // 
+            // btnSetup
+            // 
+            this.btnSetup.Location = new System.Drawing.Point(98, 12);
+            this.btnSetup.Name = "btnSetup";
+            this.btnSetup.Size = new System.Drawing.Size(90, 30);
+            this.btnSetup.TabIndex = 9;
+            this.btnSetup.Text = "Setup";
+            this.btnSetup.UseVisualStyleBackColor = true;
+            this.btnSetup.Click += new System.EventHandler(this.btnSetup_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1384, 613);
+            this.ClientSize = new System.Drawing.Size(825, 433);
+            this.Controls.Add(this.btnSetup);
             this.Controls.Add(this.lblInGame);
             this.Controls.Add(this.btnIngameMask);
             this.Controls.Add(this.btnLogout);
             this.Controls.Add(this.ingameMaskPicture);
             this.Controls.Add(this.btnCaptureScreen);
             this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.btnFPS);
             this.Controls.Add(this.btnInject);
-            this.Controls.Add(this.txtDebugLog);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "PoE Watch";
@@ -163,16 +151,14 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox txtDebugLog;
         private System.Windows.Forms.Button btnInject;
-        private System.Windows.Forms.Button btnFPS;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button btnCaptureScreen;
         private System.Windows.Forms.PictureBox ingameMaskPicture;
         private System.Windows.Forms.Button btnLogout;
         private System.Windows.Forms.Button btnIngameMask;
         private System.Windows.Forms.Label lblInGame;
+        private System.Windows.Forms.Button btnSetup;
     }
 }
 
