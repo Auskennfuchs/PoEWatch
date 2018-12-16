@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.txtDebugLog = new System.Windows.Forms.TextBox();
             this.btnInject = new System.Windows.Forms.Button();
             this.btnFPS = new System.Windows.Forms.Button();
@@ -36,6 +37,7 @@
             this.ingameMaskPicture = new System.Windows.Forms.PictureBox();
             this.btnLogout = new System.Windows.Forms.Button();
             this.btnIngameMask = new System.Windows.Forms.Button();
+            this.lblInGame = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ingameMaskPicture)).BeginInit();
             this.SuspendLayout();
@@ -44,10 +46,10 @@
             // 
             this.txtDebugLog.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtDebugLog.Location = new System.Drawing.Point(12, 421);
+            this.txtDebugLog.Location = new System.Drawing.Point(12, 496);
             this.txtDebugLog.Multiline = true;
             this.txtDebugLog.Name = "txtDebugLog";
-            this.txtDebugLog.Size = new System.Drawing.Size(1360, 180);
+            this.txtDebugLog.Size = new System.Drawing.Size(1360, 105);
             this.txtDebugLog.TabIndex = 0;
             // 
             // btnInject
@@ -79,6 +81,7 @@
             this.pictureBox1.Location = new System.Drawing.Point(12, 90);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(711, 325);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 3;
             this.pictureBox1.TabStop = false;
             // 
@@ -100,13 +103,13 @@
             this.ingameMaskPicture.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ingameMaskPicture.Location = new System.Drawing.Point(729, 90);
             this.ingameMaskPicture.Name = "ingameMaskPicture";
-            this.ingameMaskPicture.Size = new System.Drawing.Size(643, 325);
+            this.ingameMaskPicture.Size = new System.Drawing.Size(87, 325);
             this.ingameMaskPicture.TabIndex = 5;
             this.ingameMaskPicture.TabStop = false;
             // 
             // btnLogout
             // 
-            this.btnLogout.Location = new System.Drawing.Point(1282, 12);
+            this.btnLogout.Location = new System.Drawing.Point(416, 12);
             this.btnLogout.Name = "btnLogout";
             this.btnLogout.Size = new System.Drawing.Size(90, 30);
             this.btnLogout.TabIndex = 6;
@@ -124,11 +127,21 @@
             this.btnIngameMask.UseVisualStyleBackColor = true;
             this.btnIngameMask.Click += new System.EventHandler(this.btnIngameMask_Click);
             // 
+            // lblInGame
+            // 
+            this.lblInGame.AutoSize = true;
+            this.lblInGame.Location = new System.Drawing.Point(1243, 22);
+            this.lblInGame.Name = "lblInGame";
+            this.lblInGame.Size = new System.Drawing.Size(129, 20);
+            this.lblInGame.TabIndex = 8;
+            this.lblInGame.Text = "Ingame Indicator";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1384, 613);
+            this.Controls.Add(this.lblInGame);
             this.Controls.Add(this.btnIngameMask);
             this.Controls.Add(this.btnLogout);
             this.Controls.Add(this.ingameMaskPicture);
@@ -137,8 +150,9 @@
             this.Controls.Add(this.btnFPS);
             this.Controls.Add(this.btnInject);
             this.Controls.Add(this.txtDebugLog);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "PoE Watch";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -158,6 +172,7 @@
         private System.Windows.Forms.PictureBox ingameMaskPicture;
         private System.Windows.Forms.Button btnLogout;
         private System.Windows.Forms.Button btnIngameMask;
+        private System.Windows.Forms.Label lblInGame;
     }
 }
 
